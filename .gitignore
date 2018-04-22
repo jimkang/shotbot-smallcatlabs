@@ -4,3 +4,5 @@ configs/*.js
 scratch/*.jpg
 scratch/*.png
 config.mk
+*.swp
+

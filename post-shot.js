@@ -10,6 +10,7 @@ var StaticWebArchiveOnGit = require('static-web-archive-on-git');
 var randomId = require('idmaker').randomId;
 var queue = require('d3-queue').queue;
 var postImage = require('post-image-to-twitter');
+var sb = require('standard-bail')();
 
 var shotRetries = 0;
 var shotRetryLimit = 5;
@@ -60,7 +61,16 @@ function kickOff() {
 
 function getShot(webImageInst, done) {
   webimage = webImageInst;
-  webimage.getImage(behavior.webimageOpts, done);
+  if (behavior.generateImageURL) {
+    behavior.generateImageURL(sb(getImageWithURL, done));
+  } else {
+    webimage.getImage(behavior.webimageOpts, done);
+  }
+
+  function getImageWithURL(url) {
+    behavior.webimageOpts.url = url;
+    webimage.getImage(behavior.webimageOpts, done);
+  }
 }
 
 function shutDownWebimage(buffer, done) {
