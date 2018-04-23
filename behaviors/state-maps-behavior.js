@@ -1,6 +1,6 @@
 module.exports = {
   postingTargets: ['archive'], //, 'twitter'],
-  generateImageURL: require('../lib/state-maps/generate-state-map-image-url'), // TODO: Make this with improvise-on-slots
+  generateImageURL: require('../lib/state-maps/generate-state-map-image-url'),
   webimageOpts: {
     screenshotOpts: {
       clip: {
@@ -21,10 +21,9 @@ module.exports = {
     }
   },
   archive: {
-    name: 'Hills',
-    idPrefix: 'hill',
-    footerHTML: `<footer>Want more hills? <a href="http://jimkang.com/hills">Go get you some.</a>
-  <script type="text/javascript">
+    name: 'Fact maps!',
+    idPrefix: 'fact-map-',
+    footerHTML: ` <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
@@ -34,8 +33,9 @@ module.exports = {
 </script>`,
     maxEntriesPerPage: 20
   },
+  // TODO: These should all come from a callback.
   getAltText() {
-    return 'A hill.';
+    return 'Infomap!';
   },
   getCaption() {
     return '';
