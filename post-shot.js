@@ -62,29 +62,41 @@ function kickOff() {
 function getShot(webImageInst, done) {
   webimage = webImageInst;
   if (behavior.generateImageURL) {
-    behavior.generateImageURL(sb(getImageWithURL, done));
+    behavior.generateImageURL(sb(getImageWithMetadata, done));
   } else {
-    webimage.getImage(behavior.webimageOpts, done);
+    webimage.getImage(behavior.webimageOpts, sb(passImageWithBehaviorMetadata, done));
   }
 
-  function getImageWithURL(url) {
+  function getImageWithMetadata({ url, altText, caption }) {
     behavior.webimageOpts.url = url;
-    webimage.getImage(behavior.webimageOpts, done);
+    webimage.getImage(behavior.webimageOpts, sb(passImageWithMetadata, done));
+
+    function passImageWithMetadata(buffer) {
+      done(null, { buffer, altText, caption });
+    }
+  }
+
+  function passImageWithBehaviorMetadata(buffer) {
+    done(
+      null,
+      {
+        buffer,
+        altText: behavior.getAltText(),
+        caption: behavior.getCaption()
+      }
+    );
   }
 }
 
-function shutDownWebimage(buffer, done) {
-  webimage.shutDown(passBuffer);
+function shutDownWebimage(result, done) {
+  webimage.shutDown(passResult);
 
-  function passBuffer(error) {
-    done(error, buffer);
+  function passResult(error) {
+    done(error, result);
   }
 }
 
-function postToTargets(buffer, done) {
-  var altText = behavior.getAltText();
-  var caption = behavior.getCaption();
-
+function postToTargets({ buffer, altText, caption }, done) {
   if (dryRun) {
     let filePath =
       'scratch/' +
@@ -95,7 +107,7 @@ function postToTargets(buffer, done) {
 
     console.log('Writing out', filePath);
     fs.writeFileSync(filePath, buffer);
-    callNextTick(done);
+    callNextTick(done, null, buffer);
   } else {
     var q = queue();
     if (behavior.postingTargets.indexOf('archive') !== -1) {
