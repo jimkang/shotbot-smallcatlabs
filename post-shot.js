@@ -64,7 +64,10 @@ function getShot(webImageInst, done) {
   if (behavior.generateImageURL) {
     behavior.generateImageURL(sb(getImageWithMetadata, done));
   } else {
-    webimage.getImage(behavior.webimageOpts, sb(passImageWithBehaviorMetadata, done));
+    webimage.getImage(
+      behavior.webimageOpts,
+      sb(passImageWithBehaviorMetadata, done)
+    );
   }
 
   function getImageWithMetadata({ url, altText, caption }) {
@@ -77,14 +80,11 @@ function getShot(webImageInst, done) {
   }
 
   function passImageWithBehaviorMetadata(buffer) {
-    done(
-      null,
-      {
-        buffer,
-        altText: behavior.getAltText(),
-        caption: behavior.getCaption()
-      }
-    );
+    done(null, {
+      buffer,
+      altText: behavior.getAltText(),
+      caption: behavior.getCaption()
+    });
   }
 }
 
