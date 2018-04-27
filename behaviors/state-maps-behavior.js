@@ -21,7 +21,7 @@ module.exports = {
     }
   },
   archive: {
-    name: 'Fact maps!',
+    name: 'A Land of Contrasts',
     idPrefix: 'fact-map-',
     footerHTML: ` <script type="text/javascript">
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
