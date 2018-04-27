@@ -138,7 +138,7 @@ function postTweet(buffer, altText, caption, done) {
     twit,
     base64Image: buffer.toString('base64'),
     altText,
-    caption: ''
+    caption
   };
 
   postImage(postImageOpts, done);
