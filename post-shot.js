@@ -11,6 +11,7 @@ var randomId = require('idmaker').randomId;
 var queue = require('d3-queue').queue;
 var postImage = require('post-image-to-twitter');
 var sb = require('standard-bail')();
+var curry = require('lodash.curry');
 
 var shotRetries = 0;
 var shotRetryLimit = 5;
@@ -53,7 +54,15 @@ kickOff();
 
 function kickOff() {
   try {
-    waterfall([Webimage, getShot, shutDownWebimage, postToTargets], wrapUp);
+    waterfall(
+      [
+        curry(Webimage)({ executablePath: process.env.CHROMEPATH }),
+        getShot,
+        shutDownWebimage,
+        postToTargets
+      ],
+      wrapUp
+    );
   } catch (e) {
     retry();
   }

@@ -137,6 +137,10 @@ Usage
 
 You can also pass a `--dry` switch to make it just print whatever it would have posted without actually posting it.
 
+You can set the path of the instance of Chromium to use for screenshots via the environment variable CHROMEPATH. e.g. On Raspbian:
+
+    BOT=<bot name> CHROMEPATH=/usr/bin/chromium-browser node post-shot.js
+
 Tests
 -----
 

@@ -61,3 +61,8 @@ install-chromium-deps:
 	lsb-release \
 	xdg-utils \
 	wget
+
+install-fonts:
+	scp ~/Downloads/Montserrat.zip $(USER)@$(SERVER):~
+	$(SSHCMD) "unzip ~/Montserrat.zip && cd ~ && sudo cp *.ttf /usr/local/share/fonts && \
+	  fc-cache && fc-list"
