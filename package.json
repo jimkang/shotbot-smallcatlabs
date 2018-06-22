@@ -20,11 +20,11 @@
   "devDependencies": {},
   "dependencies": {
     "async-waterfall": "^0.1.5",
-    "improvise-on-slots": "^1.0.18",
+    "improvise-on-slots": "^1.0.20",
     "lodash.curry": "^4.1.1",
     "post-image-to-twitter": "^1.0.0",
-    "static-web-archive-on-git": "^2.0.1",
-    "twit": "^2.2.9",
-    "webimage": "^1.2.12"
+    "static-web-archive-on-git": "^2.0.2",
+    "twit": "^2.2.10",
+    "webimage": "^1.2.13"
   }
 }
