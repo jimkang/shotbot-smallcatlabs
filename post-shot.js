@@ -84,7 +84,7 @@ function getShot(webImageInst, done) {
     webimage.getImage(behavior.webimageOpts, sb(passImageWithMetadata, done));
 
     function passImageWithMetadata(buffer) {
-      done(null, { buffer, altText: altText + '\n' + url, caption });
+      done(null, { buffer, altText, caption });
     }
   }
 
