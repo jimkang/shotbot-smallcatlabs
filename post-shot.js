@@ -12,6 +12,7 @@ var queue = require('d3-queue').queue;
 var postImage = require('post-image-to-twitter');
 var sb = require('standard-bail')();
 var curry = require('lodash.curry');
+var Jimp = require('jimp');
 
 var shotRetries = 0;
 var shotRetryLimit = 5;
@@ -59,6 +60,7 @@ function kickOff() {
         curry(Webimage)({ executablePath: process.env.CHROMEPATH }),
         getShot,
         shutDownWebimage,
+        cropImage,
         postToTargets
       ],
       wrapUp
@@ -102,6 +104,23 @@ function shutDownWebimage(result, done) {
 
   function passResult(error) {
     done(error, result);
+  }
+}
+
+function cropImage({ buffer, altText, caption }, done) {
+  if (behavior.shouldAutoCrop) {
+    Jimp.read(buffer, sb(doCrop, done));
+  } else {
+    callNextTick(done, null, { buffer, altText, caption });
+  }
+
+  function doCrop(image) {
+    image.autocrop();
+    image.getBuffer(Jimp.AUTO, sb(passCroppedBuffer, done));
+  }
+
+  function passCroppedBuffer(cropped) {
+    done(null, { buffer: cropped, altText, caption });
   }
 }
 
