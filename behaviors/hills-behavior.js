@@ -1,5 +1,5 @@
 module.exports = {
-  postingTargets: ['archive', 'twitter'],
+  postingTargets: ['archive', 'mastodon', 'twitter'],
   webimageOpts: {
     url: 'http://jimkang.com/hills',
     screenshotOpts: {
@@ -22,17 +22,21 @@ module.exports = {
   },
   archive: {
     name: 'Hills',
+    title: 'Hills',
     idPrefix: 'hill',
+    homeLink: 'https://smidgeo.com/bots/hills',
+    rootPath: '/usr/share/nginx/html/smidgeo.com/bots/hills',
     footerHTML: `<footer>Want more hills? <a href="http://jimkang.com/hills">Go get you some.</a>
-  <script type="text/javascript">
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-49491163-1', 'jimkang.com');
-  ga('send', 'pageview');
-</script>`,
-    maxEntriesPerPage: 20
+    <p><a href="https://smidgeo.com/bots/hills/rss/index.rss">Hills RSS</a></p>
+</footer>`,
+    maxEntriesPerPage: 20,
+    generateRSS: true,
+    fileAbstractionType: 'LocalGit',
+    archiveBaseURL: 'https://smidgeo.com/bots/hills',
+    rssFeedOpts: {
+      feed_url: 'https://smidgeo.com/bots/hills/rss/index.rss',
+      site_url: 'https://smidgeo.com/bots/hills/'
+    }
   },
   getAltText() {
     return 'A hill.';

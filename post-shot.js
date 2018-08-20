@@ -1,18 +1,14 @@
 /* global process */
 
 var waterfall = require('async-waterfall');
-// var callNextTick = require('call-next-tick');
-var Twit = require('twit');
 var Webimage = require('webimage');
 var fs = require('fs');
 var callNextTick = require('call-next-tick');
-var StaticWebArchiveOnGit = require('static-web-archive-on-git');
 var randomId = require('idmaker').randomId;
-var queue = require('d3-queue').queue;
-var postImage = require('post-image-to-twitter');
 var sb = require('standard-bail')();
 var curry = require('lodash.curry');
 var Jimp = require('jimp');
+var postIt = require('@jimkang/post-it');
 
 var shotRetries = 0;
 var shotRetryLimit = 5;
@@ -33,23 +29,7 @@ if (process.argv.length > 2) {
   dryRun = process.argv[2].toLowerCase() == '--dry';
 }
 
-var staticWebStream;
-if (behavior.postingTargets.indexOf('archive') !== -1) {
-  staticWebStream = StaticWebArchiveOnGit({
-    config: config.github,
-    title: behavior.archive.name,
-    footerHTML: behavior.archive.footerHTML,
-    maxEntriesPerPage: behavior.maxEntriesPerPage
-  });
-}
-
 var webimage;
-
-var twit;
-
-if (behavior.postingTargets.indexOf('twitter') !== -1) {
-  twit = new Twit(config.twitter);
-}
 
 kickOff();
 
@@ -137,42 +117,29 @@ function postToTargets({ buffer, altText, caption }, done) {
     fs.writeFileSync(filePath, buffer);
     callNextTick(done, null, buffer);
   } else {
-    var q = queue();
-    if (behavior.postingTargets.indexOf('archive') !== -1) {
-      q.defer(postToArchive, buffer, altText, caption);
-    }
-    if (behavior.postingTargets.indexOf('twitter') !== -1) {
-      q.defer(postTweet, buffer, altText, caption);
-    }
-    q.await(done);
+    let id = behavior.archive.idPrefix + '-' + randomId(8);
+    postIt(
+      {
+        id,
+        text: caption,
+        altText,
+        mediaFilename: id + '.png',
+        buffer,
+        targets: behavior.postingTargets.map(getConfigForTarget)
+      },
+      done
+    );
   }
 }
 
-function postToArchive(buffer, altText, caption, done) {
-  var id = behavior.archive.idPrefix + '-' + randomId(8);
-  staticWebStream.write({
-    id,
-    date: new Date().toISOString(),
-    mediaFilename: id + '.png',
-    altText,
-    caption,
-    buffer
-  });
-  staticWebStream.end(done);
-}
-
-function postTweet(buffer, altText, caption, done) {
-  var postImageOpts = {
-    twit,
-    base64Image: buffer.toString('base64'),
-    altText,
-    caption
+function getConfigForTarget(target) {
+  return {
+    type: target,
+    config: target === 'archive' ? behavior[target] : config[target]
   };
-
-  postImage(postImageOpts, done);
 }
 
-function wrapUp(error, placeholder, data) {
+function wrapUp(error, data) {
   if (error) {
     console.log(error, error.stack);
 
