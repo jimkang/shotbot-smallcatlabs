@@ -2,7 +2,7 @@ var probable = require('probable');
 var callNextTick = require('call-next-tick');
 
 module.exports = {
-  postingTargets: ['archive', 'twitter'],
+  postingTargets: ['archive'],
   generateImageURL(done) {
     var url = 'http://jimkang.com/dem-bones/#hideControls=yes';
     var altText = 'Dem bones dem bones dem – dry bones!';

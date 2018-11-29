@@ -1,5 +1,5 @@
 module.exports = {
-  postingTargets: ['archive', 'twitter'],
+  postingTargets: ['archive'],
   generateImageURL: require('../lib/state-maps/generate-state-map-image-url'),
   webimageOpts: {
     screenshotOpts: {
