@@ -4,12 +4,13 @@ var callNextTick = require('call-next-tick');
 module.exports = {
   postingTargets: ['archive'],
   generateImageURL(done) {
-    var url = 'http://jimkang.com/dem-bones/#hideControls=yes';
+    var seed = 'bot-' + new Date().toISOString();
+    var url = 'http://jimkang.com/dem-bones/#hideControls=yes&seed=' + seed;
     var altText = 'Dem bones dem bones dem – dry bones!';
-    var caption = '';
+    var caption = '<a href="${url}">Source</a>';
     if (probable.roll(10) === 0) {
       url += '&useExtraParts=yes';
-      caption = 'Dem bones dem bones dem – extra bones!';
+      caption = ' | Dem bones dem bones dem – extra bones!';
       altText += ' ' + caption;
     }
     callNextTick(done, null, { url, altText, caption });

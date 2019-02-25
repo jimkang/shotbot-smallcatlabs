@@ -1,2 +1,1 @@
 require('run-shotbot');
-
