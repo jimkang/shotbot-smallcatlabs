@@ -6,13 +6,13 @@ module.exports = {
   generateImageURL(done) {
     var seed = 'bot-' + new Date().toISOString();
     var url = 'http://jimkang.com/dem-bones/#hideControls=yes&seed=' + seed;
-    var altText = 'Dem bones dem bones dem – dry bones!';
-    var caption = `<a href="${url}">Source</a>`;
-    if (probable.roll(10) === 0) {
-      url += '&useExtraParts=yes';
-      caption = ' | Dem bones dem bones dem – extra bones!';
-      altText += ' ' + caption;
+    if (probable.roll(4) === 0) {
+      const multiplier = probable.rollDie(20) + 2;
+      url += `&numberOfSetsToUse=${multiplier}`;
+      url += `&minimumNumberOfBones=${multiplier * probable.rollDie(8)}`;
     }
+    var altText = 'Dem bones dem bones dem – dry bones!';
+    var caption = `<a href="${url}">Source</a> | ` + altText;
     callNextTick(done, null, { url, altText, caption });
   },
   shouldAutoCrop: true,
