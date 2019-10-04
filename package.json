@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jimkang/shotbot",
   "devDependencies": {},
   "dependencies": {
+    "improvise-on-slots": "^1.0.24",
     "run-shotbot": "^1.2.3",
     "tablenest": "^3.0.6"
   }
