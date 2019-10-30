@@ -20,7 +20,7 @@
   "devDependencies": {},
   "dependencies": {
     "improvise-on-slots": "^1.0.24",
-    "run-shotbot": "^1.2.3",
+    "run-shotbot": "^1.2.4",
     "tablenest": "^3.0.6"
   }
 }
