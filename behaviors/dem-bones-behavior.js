@@ -15,7 +15,6 @@ module.exports = {
     var caption = `<a href="${url}">Source</a> | ` + altText;
     callNextTick(done, null, { url, altText, caption });
   },
-  shouldAutoCrop: true,
   webimageOpts: {
     screenshotOpts: {
       clip: {
