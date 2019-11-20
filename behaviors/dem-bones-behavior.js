@@ -21,15 +21,18 @@ module.exports = {
       clip: {
         x: 0,
         y: 0,
-        width: 1000,
-        height: 1000
+        width: 640,
+        height: 640
       }
     },
     viewportOpts: {
-      width: 1000,
-      height: 1000,
+      width: 640,
+      height: 640,
       deviceScaleFactor: 1
-    }
+    },
+    burstCount: 48,
+    timeBetweenBursts: 1000 / 12,
+    makeBurstsIntoAnimatedGif: true
   },
   archive: {
     name: 'Dem Bones',
