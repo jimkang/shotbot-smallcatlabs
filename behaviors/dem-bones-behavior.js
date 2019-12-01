@@ -30,7 +30,7 @@ module.exports = {
       deviceScaleFactor: 1
     },
     burstCount: 48,
-    timeBetweenBursts: 1000 / 12,
+    timeBetweenBursts: 1000 / 24,
     makeBurstsIntoAnimatedGif: true
   },
   archive: {
