@@ -1,5 +1,14 @@
 var probable = require('probable');
 var callNextTick = require('call-next-tick');
+var WanderGoogleNgrams = require('wander-google-ngrams');
+var config = require('../configs/dem-bones-config');
+var oknok = require('oknok');
+var { createWordnok } = require('wordnok');
+
+var wordnok = createWordnok({ apiKey: config.wordnik.apiKey });
+var createWanderStream = WanderGoogleNgrams({
+  wordnikAPIKey: config.wordnik.apiKey
+});
 
 module.exports = {
   postingTargets: ['archive'],
@@ -11,9 +20,82 @@ module.exports = {
       url += `&numberOfSetsToUse=${multiplier}`;
       url += `&minimumNumberOfBones=${multiplier * probable.rollDie(8)}`;
     }
-    var altText = 'Dem bones dem bones dem – dry bones!';
-    var caption = `<a href="${url}">Source</a> | ` + altText;
-    callNextTick(done, null, { url, altText, caption });
+
+    wordnok.getRandomWords(
+      {
+        customParams: {
+          minCorpusCount: 1000,
+          limit: 1
+        }
+      },
+      oknok({ ok: runWanderStream, nok: postWithoutMessage })
+    );
+
+    function runWanderStream(words) {
+      var word = words[0];
+      var messageWords = [];
+
+      var stream = createWanderStream({
+        word,
+        direction: 'forward',
+        repeatLimit: 1,
+        tryReducingNgramSizeAtDeadEnds: true,
+        shootForASentence: true,
+        maxWordCount: 8,
+        forwardStages: [
+          {
+            name: 'start',
+            needToProceed: ['noun', 'pronoun', 'noun-plural'],
+            lookFor: '*_NOUN'
+          },
+          {
+            name: 'pushedSubject',
+            needToProceed: ['verb', 'verb-intransitive', 'auxiliary-verb'],
+            lookFor: '*_VERB'
+          },
+          {
+            name: 'pushedVerb',
+            needToProceed: ['noun', 'pronoun', 'noun-plural', 'adjective'],
+            disallowCommonBadExits: true,
+            lookFor: '*_NOUN',
+            posShouldBeUnambiguous: true
+          },
+          {
+            name: 'done' // 'pushedObject'
+          }
+        ]
+      });
+      stream.on('data', saveWord);
+      stream.on('end', postWithNgram);
+      stream.on('error', postWithoutMessage);
+
+      function postWithNgram() {
+        post(messageWords.join(' ') + '.');
+      }
+
+      function saveWord(ngramWord) {
+        messageWords.push(ngramWord);
+      }
+    }
+
+    function reportError(error) {
+      console.log(error);
+    }
+
+    function postWithoutMessage(error) {
+      reportError(error);
+      post();
+    }
+
+    function post(message) {
+      var altText = 'Dem bones dem bones dem – dry bones!';
+      if (message) {
+        url += '&message=' + encodeURIComponent(message);
+      }
+
+      var caption = `<a href="${url}">Source</a> | ` + altText;
+      callNextTick(done, null, { url, altText, caption });
+    }
   },
   webimageOpts: {
     screenshotOpts: {

@@ -21,7 +21,10 @@
   "dependencies": {
     "@jimkang/post-it": "^1.1.2",
     "improvise-on-slots": "^1.0.24",
+    "oknok": "^3.0.0",
     "run-shotbot": "^1.2.4",
-    "tablenest": "^3.0.6"
+    "tablenest": "^3.0.6",
+    "wander-google-ngrams": "^2.5.2",
+    "wordnok": "^3.4.1"
   }
 }
